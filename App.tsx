@@ -1,130 +1,98 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {useState} from 'react';
 import {
-  ScrollView,
-  StatusBar,
+  TextInput,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [inputText, setInputText] = useState('');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+  const generateImage = async () => {};
 
   return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>AI Image Generator</Text>
+
+          <View style={styles.imagePreview} />
         </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter a prompt for image"
+            placeholderTextColor="#EEEEEE"
+            value={inputText}
+            onChangeText={setInputText}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={generateImage}>
+            <Text style={styles.buttonText}>Generate Image</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#242121',
   },
-  sectionTitle: {
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+  },
+  title: {
     fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
     fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 24,
+  },
+  imagePreview: {
+    height: 480,
+    width: 'auto',
+    backgroundColor: '#999999',
+    borderRadius: 12,
+  },
+  input: {
+    backgroundColor: '#242121',
+    color: '#ffffff',
+    height: 50,
+    width: 'auto',
+    fontSize: 20,
+    borderColor: '#433636',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginBottom: 20,
+    opacity: 0.5,
+  },
+  image: {
+    marginTop: 20,
+    width: 300,
+    height: 300,
+    borderRadius: 10,
+  },
+  button: {
+    paddingHorizontal: 12,
+    paddingVertical: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+  },
+  buttonText: {
+    color: '#242121',
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
 
