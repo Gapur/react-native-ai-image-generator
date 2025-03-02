@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="700"src="https://github.com/Gapur/react-native-ai-image-generator/blob/main/assets/demo.gif">
+  <img width="300"src="https://github.com/Gapur/react-native-ai-image-generator/blob/main/assets/demo.gif">
 </p>
 
 # React Native AI Image Generator
@@ -13,7 +13,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 ## Step 1: Install the repository
 
 ```sh
-git clone https://github.com/Gapur/google-place-autocomplete.git
+git clone https://github.com/Gapur/react-native-ai-image-generator.git
 ```
 
 ## Step 2: Start Metro
@@ -68,4 +68,4 @@ npm run ios
 yarn ios
 ```
 
-I use Stability AI to generate the image, and before we start, you will need the API-Key for the API. You can get that key by [signin up for the platform](https://platform.stability.ai). I store Stability AI API Key in the .env file — you should too.
+I use Stability AI to generate the image, and before we start, you will need the API-Key for the API. You can get that key by [signing up for the platform](https://platform.stability.ai). I store Stability AI API Key in the .env file — you should too.
