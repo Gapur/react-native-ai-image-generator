@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useTransition} from 'react';
 import {
   TextInput,
   StyleSheet,
@@ -6,12 +6,20 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 
 function App(): React.JSX.Element {
   const [inputText, setInputText] = useState('');
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [isPending, startTransition] = useTransition();
 
-  const generateImage = async () => {};
+  async function generateImage() {
+    startTransition(async () => {
+      setImageUrl(undefined);
+    });
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -19,20 +27,31 @@ function App(): React.JSX.Element {
         <View>
           <Text style={styles.title}>AI Image Generator</Text>
 
-          <View style={styles.imagePreview} />
+          {imageUrl ? (
+            <Image style={styles.image} source={imageUrl as any} />
+          ) : (
+            <View style={styles.imagePreview} />
+          )}
         </View>
 
         <View>
           <TextInput
-            style={styles.input}
+            style={[styles.input, inputText ? styles.emptyInput : {}]}
             placeholder="Enter a prompt for image"
             placeholderTextColor="#EEEEEE"
             value={inputText}
             onChangeText={setInputText}
           />
 
-          <TouchableOpacity style={styles.button} onPress={generateImage}>
-            <Text style={styles.buttonText}>Generate Image</Text>
+          <TouchableOpacity
+            style={styles.button}
+            disabled={isPending}
+            onPress={generateImage}>
+            {isPending ? (
+              <ActivityIndicator color="#242121" />
+            ) : (
+              <Text style={styles.buttonText}>Generate Image</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -63,6 +82,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#999999',
     borderRadius: 12,
   },
+  image: {
+    height: 480,
+    width: 'auto',
+    borderRadius: 12,
+  },
   input: {
     backgroundColor: '#242121',
     color: '#ffffff',
@@ -76,11 +100,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     opacity: 0.5,
   },
-  image: {
-    marginTop: 20,
-    width: 300,
-    height: 300,
-    borderRadius: 10,
+  emptyInput: {
+    opacity: 1,
   },
   button: {
     paddingHorizontal: 12,
