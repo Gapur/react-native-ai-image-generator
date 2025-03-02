@@ -9,6 +9,9 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+import axios from 'axios';
+
+const API_KEY = 'sk-MY-API-KEY';
 
 function App(): React.JSX.Element {
   const [inputText, setInputText] = useState('');
@@ -17,7 +20,33 @@ function App(): React.JSX.Element {
 
   async function generateImage() {
     startTransition(async () => {
-      setImageUrl(undefined);
+      try {
+        const formData = new FormData();
+        formData.append('prompt', inputText);
+
+        const response = await axios.post(
+          'https://api.stability.ai/v2beta/stable-image/generate/ultra',
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${API_KEY}`,
+              Accept: 'image/*',
+              'Content-Type': 'multipart/form-data',
+            },
+            responseType: 'blob',
+          },
+        );
+
+        if (response.status === 200) {
+          console.log('Image generated successfully!');
+          const newImageUrl = URL.createObjectURL(response.data);
+          setImageUrl(newImageUrl);
+        } else {
+          throw new Error(`${response.status}: ${await response.data.text()}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     });
   }
 
@@ -28,7 +57,7 @@ function App(): React.JSX.Element {
           <Text style={styles.title}>AI Image Generator</Text>
 
           {imageUrl ? (
-            <Image style={styles.image} source={imageUrl as any} />
+            <Image style={styles.image} source={{ uri: imageUrl }} />
           ) : (
             <View style={styles.imagePreview} />
           )}
@@ -36,7 +65,7 @@ function App(): React.JSX.Element {
 
         <View>
           <TextInput
-            style={[styles.input, inputText ? styles.emptyInput : {}]}
+            style={[styles.input, inputText ? styles.filledInput : {}]}
             placeholder="Enter a prompt for image"
             placeholderTextColor="#EEEEEE"
             value={inputText}
@@ -100,7 +129,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     opacity: 0.5,
   },
-  emptyInput: {
+  filledInput: {
     opacity: 1,
   },
   button: {
